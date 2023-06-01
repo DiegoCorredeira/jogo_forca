@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include <time.h>
-
-
 
 #define MAX_PALAVRA 20
 #define MAX_TENTATIVA 8
 #define NUM_TEMAS 3
 
-void limpaTela(){
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+void limpaTela() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }
+
 void exibirPalavra(const char* palavraSecreta, int tamanhoPalavra){
     printf("Palavra: ");
     for (int i = 0; i < tamanhoPalavra; i++){
@@ -24,8 +24,21 @@ void exibirPalavra(const char* palavraSecreta, int tamanhoPalavra){
     printf("\n");
 
 }
+void exibirTentativasRestantes(int tentativas){
+    printf("Tentativas restantes: %d\n", MAX_TENTATIVA - tentativas);
+}
 
-// 3 temas - País, Frutas, Animais
+void exibirErros(const char* letrasErradas,int numeroLetrasErradas){
+
+    printf("Letras erradas: ");
+    for (int i = 0; i < numeroLetrasErradas; ++i) {
+        printf("%c",letrasErradas[i]);
+
+    }
+    printf("\n");
+
+}
+
 int main(){
     char temas[NUM_TEMAS][MAX_PALAVRA] = {
         "paises",
@@ -68,19 +81,76 @@ int main(){
     srand(time(NULL));
     int palavraAleatoria = rand() % numPalavras;
 
-    for (int i = 0; i <= palavraAleatoria; ++i) {
+    for (int i = 0; i <= palavraAleatoria; i++) {
         fgets(palavraSecreta, sizeof(palavraSecreta), arquivo);
     }
 
     tamanhoPalavra = strlen(palavraSecreta);
-    if (palavraSecreta[tamanhoPalavra - 1] == "\n"){
-        palavraSecreta[tamanhoPalavra - 1] = "\0";
+    if (palavraSecreta[tamanhoPalavra - 1] == '\n'){
+        palavraSecreta[tamanhoPalavra - 1] = '\0';
         tamanhoPalavra--;
     }
     fclose(arquivo);
 
+    char palavraEscondida[MAX_PALAVRA];
+    for (int i = 0; i < tamanhoPalavra; i++) {
+        palavraEscondida[i] = '_';
+    }
+    palavraEscondida[tamanhoPalavra] = '\0';
 
 
+    char letraErrada[MAX_TENTATIVA];
+    int numeroLetrasErradas = 0;
+
+
+    while (tentativas < MAX_TENTATIVA && letrasDescobertas < tamanhoPalavra){
+        limpaTela();
+        exibirPalavra(palavraEscondida, tamanhoPalavra);
+        exibirTentativasRestantes(tentativas);
+        exibirErros(letraErrada, numeroLetrasErradas);
+
+        printf("Informe uma letra: ");
+        scanf("%c", &letra);
+        letra = toupper(letra);
+
+
+        int letrasEncontradas = 0;
+
+        for (i = 0; i < tamanhoPalavra; ++i) {
+            if(toupper(palavraSecreta[i]) == letra && palavraEscondida[i] == '_'){
+                palavraEscondida[i] = palavraSecreta[i];
+                letrasDescobertas++;
+                letrasEncontradas = 1;
+            }
+
+        }
+
+        if (!letrasEncontradas){
+            int letraJaTentada = 0;
+            for (int i = 0; i < numeroLetrasErradas; ++i) {
+                if(letraErrada[i] == letra){
+                    letraJaTentada = 1;
+                    break;
+                }
+
+            }
+            if(!letraJaTentada){
+                letraErrada[numeroLetrasErradas] = letra;
+                numeroLetrasErradas++;
+                tentativas++;
+            }
+        }
+
+    }
+    limpaTela();
+    exibirPalavra(palavraEscondida, tamanhoPalavra);
+
+
+    if (letrasDescobertas == tamanhoPalavra) {
+        printf("Parabéns, você acertou a palavra secreta!");
+    }else{
+        printf("Você perdeu, meu camaradaaaaaaa! A palavra secreta era %s\n", palavraSecreta);
+    }
     return 0;
 }
 
