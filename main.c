@@ -4,6 +4,10 @@
 #include <string.h>
 #include <time.h>
 
+//Pesquisar mais sobre o CMAKE
+//Pesquisar sobre o nvchad
+//Olhar com carinho sobre o VIM
+
 #define MAX_PALAVRA 20
 #define MAX_TENTATIVA 8
 #define NUM_TEMAS 3
