@@ -1,3 +1,5 @@
 # ninja log v5
 0	136	7073445218765580	CMakeFiles/forca_c.dir/main.c.obj	d30c16e898a70234
 140	287	7073445220246438	forca_c.exe	f06199ea4d2eff67
+3	120	7073449692371081	CMakeFiles/forca_c.dir/main.c.obj	d30c16e898a70234
+121	245	7073449693566430	forca_c.exe	f06199ea4d2eff67

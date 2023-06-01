@@ -38,6 +38,16 @@ int main(){
     }
     printf("Informe o número do tema escolhido: ");
     scanf("%d", &temaEscolhido);
+    temaEscolhido--;
+
+
+    char nomeArquivo[MAX_PALAVRA + 4];
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "%s.txt", temas[temaEscolhido]);
+    FILE* arquivo = fopen(nomeArquivo, "r");
+    if (arquivo == NULL){
+        printf("Erro ao abrir o arquivo de palavras");
+        return 1;
+    }
 
     return 0;
 }
