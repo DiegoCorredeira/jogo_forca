@@ -16,6 +16,15 @@ void limpaTela(){
         system("clear");
     #endif
 }
+void exibirPalavra(const char* palavraSecreta, int tamanhoPalavra){
+    printf("Palavra: ");
+    for (int i = 0; i < tamanhoPalavra; i++){
+        printf("%c", palavraSecreta[i]);
+    }
+    printf("\n");
+
+}
+
 // 3 temas - País, Frutas, Animais
 int main(){
     char temas[NUM_TEMAS][MAX_PALAVRA] = {
@@ -45,9 +54,32 @@ int main(){
     snprintf(nomeArquivo, sizeof(nomeArquivo), "%s.txt", temas[temaEscolhido]);
     FILE* arquivo = fopen(nomeArquivo, "r");
     if (arquivo == NULL){
-        printf("Erro ao abrir o arquivo de palavras");
+        printf("Erro ao abrir o arquivo de palavras\n");
         return 1;
     }
+
+    int numPalavras = 0;
+    char linha[MAX_PALAVRA];
+    while (fgets(linha, sizeof(linha), arquivo) != NULL){
+        numPalavras++;
+    }
+
+    rewind(arquivo);
+    srand(time(NULL));
+    int palavraAleatoria = rand() % numPalavras;
+
+    for (int i = 0; i <= palavraAleatoria; ++i) {
+        fgets(palavraSecreta, sizeof(palavraSecreta), arquivo);
+    }
+
+    tamanhoPalavra = strlen(palavraSecreta);
+    if (palavraSecreta[tamanhoPalavra - 1] == "\n"){
+        palavraSecreta[tamanhoPalavra - 1] = "\0";
+        tamanhoPalavra--;
+    }
+    fclose(arquivo);
+
+
 
     return 0;
 }
